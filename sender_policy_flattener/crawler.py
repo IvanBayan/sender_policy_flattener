@@ -20,6 +20,12 @@ def spf2ips(records, domain, resolvers=default_resolvers):
 
 def crawl(rrname, rrtype, domain, ns=default_resolvers):
     try:
+        answer = ns.query(rrname, "cname")
+        rrname = str(next(answer.__iter__()))
+    except resolver.NoAnswer:
+        pass
+
+    try:
         answers = ns.query(rrname, rrtype)
     except Exception as err:
         print(repr(err), rrname, rrtype)
